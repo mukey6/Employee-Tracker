@@ -1,8 +1,7 @@
-# Employee-Tracker
-
 DROP TABLE IF EXISTS department;
 DROP TABLE IF EXISTS role;
 DROP TABLE IF EXISTS employee;
+-- the order above matter?
 
 CREATE TABLE department (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
@@ -18,7 +17,7 @@ CREATE TABLE department (
     CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE SET NULL
     );
 
- CREATE TABLE employee (
+     CREATE TABLE employee (
     id INTEGER AUTO_INCREMENT PRIMARY KEY,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
@@ -26,7 +25,3 @@ CREATE TABLE department (
     manager_id INTEGER,
     CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE SET NULL
     );
-
-    
-INSERT INTO role (id, title, salary, department_id)
-    VALUES (1, "manager", 30000, 1);
