@@ -30,3 +30,27 @@ CREATE TABLE department (
     
 INSERT INTO role (id, title, salary, department_id)
     VALUES (1, "manager", 30000, 1);
+
+    SELECT candidates.*, parties.name AS party_name, COUNT(candidate_id)
+FROM votes
+LEFT JOIN candidates ON votes.candidate_id = candidates.id
+LEFT JOIN parties ON candidates.party_id = parties.id
+GROUP BY candidate_id
+
+select employee.*, salary as employee_salary from role
+left join employee on employee.role_id = role.id;
+
+select role.*, name from department
+left join role on department.id=role.department_id;
+
+UPDATE users
+SET username = "Lernantino", email = "lernantino@gmail.com", password = "newPassword1234"
+WHERE id = 1;
+
+delete from role where id=8;
+
+update role 
+    -> set title = "trainer", salary = 55000, department_id=3
+    -> where id=1;
+
+    delete from role where id=?
