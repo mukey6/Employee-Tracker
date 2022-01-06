@@ -56,11 +56,11 @@ async function init() {
 }
 
 async function department() {
-  // const sql = `SELECT * FROM department`;
+  const sql = `SELECT * FROM department`;
 
-  const [rows, fields] = await (await conn).execute(`SELECT * FROM department`);
-  console.table(rows)
-  init()
+  const [rows, fields] = await (await conn).execute(sql);
+  console.table(rows);
+  init();
   return;
 }
 
@@ -77,76 +77,29 @@ async function addDepartment() {
   const { departmentName } = newDept;
   const sql = `INSERT INTO department (name)
 VALUES (?)`;
-  db.query(sql, departmentName, (err, data) => {
+  conn.query(sql, departmentName, (err, data) => {
     if (err) throw err;
     console.log("dept added", data);
   });
-  // db.end
+  // conn.end
   department();
 }
 
-function employee() {
-  const sql = `SELECT * FROM employee`;
-  db.query(sql, (err, data) => {
-    if (err) throw err;
-    console.table(data);
-    init();
-  });
-}
+async function role() {
+  const sql = `select * from role`;
 
-async function addEmployee() {
-  const addEmployeeAnswer = await inquirer.prompt([
-    {
-      type: "input",
-      name: "firstName",
-      message: "what is the employees first name",
-    },
-    {
-      type: "input",
-      name: "lastName",
-      message: "what is the employees last name",
-    },
-    {
-      type: "list",
-      name: "role",
-      message: "what is the employees role",
-      choices: role,
-    },
-    {
-      type: "input",
-      name: "managerName",
-      message: "what is the employees manager name",
-    },
-  ]);
-  const { firstName, lastName, role, managerName } = addEmployeeAnswer;
-  const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES (?, ?, ?, ?) `;
+  const [roles] = await (await conn).execute(sql);
+  console.table(roles);
 
-  // this is workinmg with numbers for role and manager name
-  db.query(sql, [firstName, lastName, role, managerName], (error, data) => {
-    if (error) throw error;
-    console.table(data);
-  });
-  employee();
-}
-
-function role() {
-  const sql = `select * from role
-  `;
-
-  db.query(sql, (err, data) => {
-    if (err) throw err;
-    console.table(data);
-    init();
-  });
-}
-
-async function listAllDepartments() {
-  const [rows, fields] = await (await conn).execute(`SELECT * FROM department`);
-  return rows
+  // conn.query(sql, (err, data) => {
+  //   if (err) throw err;
+  //   console.table(data);
+  // });
+  init();
 }
 
 async function addRole() {
+  const [departments] = await (await conn).execute(`select * from department`);
   const newRole = await inquirer.prompt([
     {
       type: "input",
@@ -162,20 +115,122 @@ async function addRole() {
       type: "list",
       name: "deptName",
       message: "which department does this role belong to?",
-      choices: listAllDepartments(),
+      choices: departments.map((dept, id) => {
+        return dept.name;
+      }),
     },
   ]);
   const { roleName, salary, deptName } = newRole;
-  const sql = `INSERT INTO role (title, salary, department_id)
-VALUES (?,?,?)`;
-  // for dept name, gotta connect dept id to name
-  db.query(sql, [roleName, salary, deptName], (err, data) => {
-    if (err) throw err;
-    console.log("role add", data);
+  const [dept] = departments.filter((dept) => {
+    return dept.name === deptName;
   });
+  const sql = `INSERT INTO role (title, salary, department_id) VALUES (?,?,?)`;
+  // for dept name, gotta connect dept id to name
+  const [addedRole] = await (await conn).execute(sql, [roleName, salary, dept.id]);
+  console.log(addedRole);
+
+  // conn.query(sql, [roleName, salary, dept.id], (err, data) => {
+  //   if (err) throw err;
+  //   console.log("role add", data);
+  // })edR
   role();
+  // init();
 }
+
+// async function listAllDepartments() {
+//   const [rows, fields] = await (await conn).execute(`SELECT * FROM department`);
+//   return rows;
+// }
+
+// async function addRole() {
+//   const newRole = await inquirer.prompt([
+//     {
+//       type: "input",
+//       name: "roleName",
+//       message: "what is the name of the role",
+//     },
+//     {
+//       type: "input",
+//       name: "salary",
+//       message: "what is the salary for the role",
+//     },
+//   ]);
+
+//   const { roleName, salary, deptName } = newRole;
+
+//   const roleSql = `select name, id from department`;
+// conn.query(roleSql, (err, data) => {
+//     if (err) throw err;
+
+//     const department = data.map(({ name, id }) => ({ name: name, value: id }));
+//   inquirer.prompt([
+//       {
+//         type: "list",
+//         name: "deptName",
+//         message: "which department does this role belong to?",
+//         choices: department,
+//       },
+//     ]).then((deptName)=>{
+
+//       newRole.push(deptName);
+
+//       const sql = `INSERT INTO role (title, salary, department_id)
+//         VALUES (?,?,?)`;
+//       // for dept name, gotta connect dept id to name
+//       conn.query(sql, [roleName, salary, deptName], (err, data) => {
+//         if (err) throw err;
+//         console.log("role add", data);
+//         role();
+//       });
+//     })
+
+//   });
+// }
 
 init();
 
 // module.exports= init;
+// function employee() {
+//   const sql = `SELECT * FROM employee`;
+//   conn.query(sql, (err, data) => {
+//     if (err) throw err;
+//     console.table(data);
+//     init();
+//   });
+// }
+
+// async function addEmployee() {
+//   const addEmployeeAnswer = await inquirer.prompt([
+//     {
+//       type: "input",
+//       name: "firstName",
+//       message: "what is the employees first name",
+//     },
+//     {
+//       type: "input",
+//       name: "lastName",
+//       message: "what is the employees last name",
+//     },
+//     {
+//       type: "list",
+//       name: "role",
+//       message: "what is the employees role",
+//       choices: role,
+//     },
+//     {
+//       type: "input",
+//       name: "managerName",
+//       message: "what is the employees manager name",
+//     },
+//   ]);
+//   const { firstName, lastName, role, managerName } = addEmployeeAnswer;
+//   const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
+// VALUES (?, ?, ?, ?) `;
+
+//   // this is workinmg with numbers for role and manager name
+//   conn.query(sql, [firstName, lastName, role, managerName], (error, data) => {
+//     if (error) throw error;
+//     console.table(data);
+//   });
+//   employee();
+// }
