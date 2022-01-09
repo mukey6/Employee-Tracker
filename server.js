@@ -4,10 +4,6 @@ import {role, addRole} from './lib/role.js'
 import {department, addDepartment} from './lib/department.js'
 import {employee, addEmployee} from './lib/employee.js'
 
-import table from 'console.table';
-
-
-
 async function init() {
   const answers = await inquirer.prompt([
     {
@@ -21,7 +17,6 @@ async function init() {
         "add a department",
         "add a role",
         "add an employee",
-        "update an employee role",
         "end",
       ],
     },
@@ -38,15 +33,12 @@ async function init() {
     init()
   } else if (answers.options === "add a department") {
     await addDepartment();
-    await department()
     init()
   } else if (answers.options === "add a role") {
     await addRole();
-    await role();
     init()
   } else if (answers.options === "add an employee") {
     await addEmployee();
-    await employee();
     init()
   } else if (answers.options === "update an employee role") {
   } else {

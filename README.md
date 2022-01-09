@@ -1,61 +1,23 @@
 # Employee-Tracker
 
-DROP TABLE IF EXISTS department;
-DROP TABLE IF EXISTS role;
-DROP TABLE IF EXISTS employee;
+## Description
+   This is a command-line application that is created using node.js, inquirer and MySQL. It allows business owner track their employees. User can add departments, roles, and employees. User will get prompted with list of choices on what they would like to do. They can assign roles to the department they belong to. They can assign employee to a role and if they have a reporting manager, they can assign the employee being added to that manager
+   
+## Table of Contents
+  - [Installation](#Installation)
+  - [Usage](#Usage)
+  - [Questions](#Questions)
 
-CREATE TABLE department (
-    id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(30) NOT NULL
-    );
+## Installation
+ User can clone this repository from GitHub 
 
--- department ID constraint to id from dept table?
-  CREATE TABLE role (
-    id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(30) NOT NULL,
-    salary DECIMAL,
-    department_id INTEGER,
-    CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE SET NULL
-    );
 
- CREATE TABLE employee (
-    id INTEGER AUTO_INCREMENT PRIMARY KEY,
-    first_name VARCHAR(30) NOT NULL,
-    last_name VARCHAR(30) NOT NULL,
-    role_id INTEGER,
-    manager_id INTEGER,
-    CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES role(id) ON DELETE SET NULL
-    );
+## Usage
 
+in the main directory run npm start in the terminal to start application. 
+You can click [HERE](https://watch.screencastify.com/v/hE8nVM7KkC9VnouZgiZM) to access the demo video  
+
+## Questions
+If you have any Questions, reach me at [Email](), [Github](https://github.com/)
     
-INSERT INTO role (id, title, salary, department_id)
-    VALUES (1, "manager", 30000, 1);
-
-    SELECT candidates.*, parties.name AS party_name, COUNT(candidate_id)
-FROM votes
-LEFT JOIN candidates ON votes.candidate_id = candidates.id
-LEFT JOIN parties ON candidates.party_id = parties.id
-GROUP BY candidate_id
-
-select employee.*, salary as employee_salary from role
-left join employee on employee.role_id = role.id;
-
-select role.*, name from department
-left join role on department.id=role.department_id;
-
-UPDATE users
-SET username = "Lernantino", email = "lernantino@gmail.com", password = "newPassword1234"
-WHERE id = 1;
-
-delete from role where id=8;
-
-update role 
-    -> set title = "trainer", salary = 55000, department_id=3
-    -> where id=1;
-
-    delete from role where id=?
-
-    select from employee 
-
-    FOREIGN KEY (manager_id) REFERENCES employee(id) ON DELETE CASCADE
-    CONSTRAINT fk_manager FOREIGN KEY (manager_id) REFERENCES employee(id) 
+ 
