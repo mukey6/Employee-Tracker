@@ -47,7 +47,7 @@ async function init() {
   } else if (answers.options === "add an employee") {
     await addEmployee();
     await employee();
-    init
+    init()
   } else if (answers.options === "update an employee role") {
   } else {
     conn.end();

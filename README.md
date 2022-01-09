@@ -54,3 +54,8 @@ update role
     -> where id=1;
 
     delete from role where id=?
+
+    select from employee 
+
+    FOREIGN KEY (manager_id) REFERENCES employee(id) ON DELETE CASCADE
+    CONSTRAINT fk_manager FOREIGN KEY (manager_id) REFERENCES employee(id) 
